@@ -6,9 +6,12 @@ authors = ["Garrett Shipley <garrett.shipley7+github@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+typer = "^0.6.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.1.2"
+black = "^22.6.0"
+isort = "^5.10.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
