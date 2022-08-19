@@ -1,4 +1,6 @@
-from subprocess import PIPE, CalledProcessError, Popen
+from subprocess import PIPE, Popen
+
+import typer
 
 
 def execute(cmd: list[str]):
@@ -11,7 +13,7 @@ def execute(cmd: list[str]):
     return_code = popen.wait()
 
     if return_code:
-        raise CalledProcessError(return_code, cmd)
+        raise typer.Exit(1)
 
 
 def run_in_R(command: str):
@@ -27,5 +29,5 @@ def check_installed(package_name: str):
             pass
 
         return True
-    except CalledProcessError:
+    except typer.Exit:
         return False
