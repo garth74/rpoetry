@@ -5,6 +5,8 @@ from subprocess import PIPE, Popen
 import typer
 from loguru import logger
 
+DEBUG = False
+
 
 def execute(cmd: list[str]):
     """Execute a command in a subprocess that iterates over the lines as they are produced."""
@@ -19,18 +21,26 @@ def execute(cmd: list[str]):
         raise typer.Exit(1)
 
 
-def run_in_R(command: str):
+def _run_in_R(command: str):
     """Run the command in an R subprocess."""
     cmd = ["Rscript", "-e", command]
     yield from execute(cmd)
 
 
+def run_in_R(command: str, quiet: bool = False):
+    """Run the command in an R subprocess."""
+    for line in _run_in_R(command):
+        if not quiet:
+            typer.echo(line)
+
+        if DEBUG:
+            logger.debug(line)
+
+
 def check_installed(package_name: str):
     """Check if a package is installed in R."""
     try:
-        for _ in run_in_R(f"packageVersion('{package_name}')"):
-            pass
-
+        run_in_R(f"packageVersion('{package_name}')")
         return True
     except typer.Exit:
         return False
@@ -45,10 +55,3 @@ def create_paths_vector(paths_iterable: t.Iterable[Path]):
     """Create a string representing R syntax for a vector of file paths."""
     files = [f'"{path.as_posix()}"' for path in paths_iterable]
     return "c(" + ",".join(files) + ")"
-
-
-def echo_lines(lines: t.Iterable[str]):
-    """Echo lines of a command run in R."""
-    for line in lines:
-        logger.debug(line)
-        typer.echo(line)

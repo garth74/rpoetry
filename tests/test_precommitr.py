@@ -16,9 +16,9 @@ def test_version():
 
 
 def test_call_rscript():
-    from precommitr.utils import run_in_R
+    from precommitr.utils import _run_in_R  # type: ignore
 
-    assert "hello" in set(run_in_R('cat("hello")'))
+    assert "hello" in set(_run_in_R('cat("hello")'))
 
 
 def test_create_package():
