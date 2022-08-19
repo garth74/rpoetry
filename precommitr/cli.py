@@ -44,3 +44,31 @@ def check(pkg: Path = typer.Option(".", resolve_path=True)):
     """Calls devtools::check()."""
     echo_lines(run_in_R(f'devtools::check("{pkg.as_posix()}")'))
     typer.Exit(0)
+
+
+def compare_modified_times(path1: Path, path2: Path):
+    """Returns True if path1 was modified after path2."""
+    return path1.stat().st_mtime > path2.stat().st_mtime
+
+
+def create_paths_vector(paths_iterable: t.Iterable[Path]):
+    """Create a string representing R syntax for a vector of file paths."""
+    files = [f'"{path.as_posix()}"' for path in paths_iterable]
+    return "c(" + ",".join(files) + ")"
+
+
+@app.command()
+def build_rmd(pkg: Path = typer.Option(".", resolve_path=True)):
+    """Calls devtools::build_rmd() with .Rmd files."""
+    paths: list[Path] = []
+    for rmd_path in pkg.rglob("*.[Rr]md"):
+        md_path = rmd_path.with_suffix(".md")
+        if md_path.exists() and compare_modified_times(md_path, rmd_path):
+            paths.append(rmd_path)
+
+    if not paths:
+        typer.Exit(0)
+
+    vector_string = create_paths_vector(paths)
+    echo_lines(run_in_R(f"devtools::build_rmd({vector_string})"))
+    typer.Exit(0)
