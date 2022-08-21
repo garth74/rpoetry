@@ -56,5 +56,12 @@ def compare_modified_times(path1: Path, path2: Path):
 
 def create_paths_vector(paths_iterable: t.Iterable[Path]):
     """Create a string representing R syntax for a vector of file paths."""
-    files = [f'"{path.as_posix()}"' for path in paths_iterable]
-    return "c(" + ",".join(files) + ")"
+    return to_charcter_vector(paths_iterable, to_str=Path.as_posix)
+
+
+def to_charcter_vector(
+    iterable: t.Iterable[t.Any], to_str: t.Callable[[t.Any], str] = str
+):
+    """Convert an iterable to a character vector string."""
+    quoted_iterable = (f'"{elem}"' for elem in map(to_str, iterable))
+    return "c(" + ",".join(quoted_iterable) + ")"
