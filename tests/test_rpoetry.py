@@ -1,8 +1,8 @@
 import tempfile
 from pathlib import Path
 
-from precommitr import __version__
-from precommitr.cli import app
+from rpoetry import __version__
+from rpoetry.cli import app
 from typer.testing import CliRunner
 
 runner = CliRunner()
@@ -16,7 +16,7 @@ def test_version():
 
 
 def test_call_rscript():
-    from precommitr.utils import _run_in_R  # type: ignore
+    from rpoetry.utils import _run_in_R  # type: ignore
 
     assert "hello" in set(_run_in_R('cat("hello")'))
 

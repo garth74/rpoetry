@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "precommitR"
+name = "rpoetry"
 version = "0.1.0"
 description = ""
 authors = ["Garrett Shipley <garrett.shipley7+github@gmail.com>"]
@@ -20,7 +20,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-precommitR = "precommitr.cli:app"
+precommitR = "rpoetry.cli:app"
 
 [tool.pytest.ini_options]
 log_cli = true

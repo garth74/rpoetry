@@ -9,7 +9,10 @@ DEBUG = False
 
 
 def execute(cmd: list[str]):
-    """Execute a command in a subprocess that iterates over the lines as they are produced."""
+    """
+    Execute a command in a subprocess and
+    iterates over the lines as they are produced.
+    """
     popen = Popen(cmd, stdout=PIPE, universal_newlines=True)
     for stdout_line in iter(popen.stdout.readline, ""):  # type: ignore
         yield stdout_line

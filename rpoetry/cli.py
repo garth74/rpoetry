@@ -7,14 +7,19 @@ from pathlib import Path
 
 import typer
 
-from .utils import check_installed, compare_modified_times, create_paths_vector, run_in_R
+from .utils import (
+    check_installed,
+    compare_modified_times,
+    create_paths_vector,
+    run_in_R,
+)
 
-app = typer.Typer(name="precommitr")
+app = typer.Typer(name="rpoetry")
 
 
 @app.callback()
 def main():
-    """precommitR - the cli for devtools."""
+    """rpoetry - the cli for devtools."""
     if not check_installed("devtools"):
         typer.echo("devtools is not installed.")
         raise typer.Exit(1)
@@ -74,7 +79,10 @@ class License(str, Enum):
 
 
 @app.command()
-def license(license: License = License.gpl3, pkg: Path = typer.Option(".", resolve_path=True)):
+def license(
+    license: License = License.gpl3,
+    pkg: Path = typer.Option(".", resolve_path=True),
+):
     """Select a license for the package."""
     cwd = os.getcwd()
 
